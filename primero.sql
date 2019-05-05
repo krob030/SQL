@@ -23,3 +23,11 @@ SELECT last_name, COUNT(*) AS "LAST_NAME_REPEATED" FROM actor GROUP BY last_name
 UPDATE actor SET first_name= "HARPO" WHERE first_name= "GROUCHO" AND last_name= "WILLIAMS";
 -- 4d. Perhaps we were too hasty in changing GROUCHO to HARPO. It turns out that GROUCHO was the correct name after all! In a single query, if the first name of the actor is currently HARPO, change it to GROUCHO. 
 UPDATE actor SET first_name= "GROUCHO" WHERE first_name= "HARPO" AND last_name= "WILLIAMS";
+-- 5a. You cannot locate the schema of the address table. Which query would you use to re-create it?
+SHOW CREATE TABLE address;
+DESC address;
+-- 6a. Use JOIN to display first and last names, address, of each staff member. Use the tables staff and address:
+SELECT first_name, last_name, address FROM staff AS s INNER JOIN address AS a ON (s.address_id= a.address_id);
+-- 6b. Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment.
+SELECT s.staff_id, first_name, last_name, SUM(amount) as "Total amount" FROM staff s INNER JOIN payment p 
+ON s.staff_id = p.staff_id AND payment_date LIKE "2005-08%" GROUP BY s.staff_id;

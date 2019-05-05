@@ -29,5 +29,21 @@ DESC address;
 -- 6a. Use JOIN to display first and last names, address, of each staff member. Use the tables staff and address:
 SELECT first_name, last_name, address FROM staff AS s INNER JOIN address AS a ON (s.address_id= a.address_id);
 -- 6b. Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment.
-SELECT s.staff_id, first_name, last_name, SUM(amount) as "Total amount" FROM staff s INNER JOIN payment p 
+SELECT s.staff_id, first_name, last_name, SUM(amount) AS "Total amount" FROM staff s INNER JOIN payment p 
 ON s.staff_id = p.staff_id AND payment_date LIKE "2005-08%" GROUP BY s.staff_id;
+-- 6c. List film and number of actors listed for that film. Use tables film_actor and film. Use inner join.
+SELECT f.title, COUNT(a.actor_id) AS "Number of actors" FROM film_actor a INNER JOIN film f
+ON f.film_id= a.film_id GROUP BY f.title;
+-- 6d. How many copies of the film Hunchback Impossible exist in the inventory system?
+SELECT film_id, COUNT(film_id) AS "Inventory copies" FROM inventory WHERE film_id IN 
+(SELECT film_id FROM film WHERE title= "Hunchback Impossible");
+-- 6e. Use tables payment and customer and JOIN, list the total paid by each customer. List customers by last name:
+SELECT c.first_name, c.last_name, SUM(p.amount) AS "Total Amount Paid" FROM payment p INNER JOIN customer c
+ON c.customer_id= p.customer_id GROUP BY c.first_name, c.last_name ORDER BY c.last_name ASC;
+ -- 7a. Music of Queen and Kris Kristofferson resurgence. As consequence, films starting with K and Q have also soared in popularity.
+	-- Use subqueries to display movie titles starting with K and Q whose language is English.
+SELECT title FROM film WHERE title LIKE "K%" OR title LIKE "Q%" 
+AND language_id IN (SELECT language_id FROM language WHERE name= "English");
+-- 7b. Display actors in film Alone Trip.
+SELECT first_name, last_name FROM actor a INNER JOIN film_actor f ON a.actor_id = f.actor_id
+WHERE film_id IN (SELECT film_id FROM film WHERE title = 'Alone Trip');
